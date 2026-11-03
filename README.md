@@ -169,27 +169,47 @@ curl -X POST http://localhost:8000/api/qa/voice \
 
 ---
 
-## ☁️ 1-Click Deployment (Bonus Points)
+## ☁️ 100% Free Cloud Deployment Guides (Bonus Points)
 
-### Option A: Render (Free Cloud Deployment)
-1. Fork or push to your GitHub repository.
-2. In [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
-3. Connect your repository (`render.yaml` is pre-configured).
-4. Set the `SARVAM_API_KEY` secret environment variable.
-5. Deploy! Render will give you a public `https://<your-app>.onrender.com` URL.
+### Option A: Vercel (100% Free Serverless Deployment)
+The repository is pre-configured with `vercel.json` and `api/index.py`:
+1. Go to [vercel.com](https://vercel.com) and log in with your GitHub account.
+2. Click **Add New...** -> **Project**.
+3. Import your GitHub repository: `pandeyysurabhi/sarvam`.
+4. In the configuration screen, expand **Environment Variables**:
+   - **Key:** `SARVAM_API_KEY`
+   - **Value:** `your_actual_sarvam_api_key`
+5. Click **Deploy**.
+6. Within ~60 seconds, Vercel will give you a live production URL:
+   `https://sarvam-<your-username>.vercel.app`!
 
-### Option B: Docker
+### Option B: Streamlit Community Cloud (100% Free, Zero Cold Starts)
+The repository includes a dedicated `streamlit_app.py`:
+1. Go to [share.streamlit.io](https://share.streamlit.io) and log in with GitHub.
+2. Click **Create app** -> **I already have an app**.
+3. Select your repository: `pandeyysurabhi/sarvam`.
+4. Set Main file path: `streamlit_app.py`.
+5. Under **Advanced settings** -> **Secrets**, paste:
+   ```toml
+   SARVAM_API_KEY = "your_actual_sarvam_api_key"
+   ```
+6. Click **Deploy**! You will have a permanent live URL:
+   `https://sarvam-<your-username>.streamlit.app`!
+
+### Option C: Render (Free Web Service)
+1. In [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
+2. Select your repository (`render.yaml` is pre-configured).
+3. Set `SARVAM_API_KEY` under Environment Variables and deploy!
+
+### Option D: Docker
 ```bash
 docker build -t vaanisetu .
 docker run -p 8000:8000 -e SARVAM_API_KEY="your_key" vaanisetu
 ```
 
-### Option C: Docker Compose
-```bash
-docker compose up -d
-```
 
 ---
 
 ## 📜 License
 Distributed under the MIT License. Built with ❤️ for Bharat using [Sarvam AI](https://docs.sarvam.ai).
+

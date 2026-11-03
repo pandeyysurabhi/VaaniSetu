@@ -300,12 +300,18 @@ async def api_qa_voice(
 
 # Mount static web frontend if directory exists
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
+
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
-    @app.get("/")
-    def serve_frontend():
+@app.get("/")
+def serve_frontend():
+    if (PUBLIC_DIR / "index.html").exists():
+        return FileResponse(str(PUBLIC_DIR / "index.html"))
+    if (STATIC_DIR / "index.html").exists():
         return FileResponse(str(STATIC_DIR / "index.html"))
+    return JSONResponse({"message": "VaaniSetu API is running"})
 
 if __name__ == "__main__":
     import uvicorn

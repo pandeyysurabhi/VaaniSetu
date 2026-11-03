@@ -76,3 +76,4 @@ def answer_document_question(
         "audio_data_uri": audio_res["audio_data_uri"],
         "audio_base64": audio_res["audio_base64"]
     }
+
