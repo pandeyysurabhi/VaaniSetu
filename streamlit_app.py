@@ -207,3 +207,4 @@ with col_right:
                 qa_audio = base64.b64decode(qa_res["audio_base64"])
                 st.write(f"**Answer:** {qa_res['answer_text']}")
                 st.audio(qa_audio, format="audio/mp3")
+

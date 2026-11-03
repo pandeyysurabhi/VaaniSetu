@@ -1,7 +1,7 @@
 # 🎙️ VaaniSetu (वाणीसेतु) — Indic Audio Intelligence & Accessibility Studio
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?logo=fastapi)](https://fastapi.tiangolo.com)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.30+-FF4B4B.svg?logo=streamlit)](https://streamlit.io)
 [![Sarvam AI](https://img.shields.io/badge/Powered%20By-Sarvam%20AI-orange.svg)](https://www.sarvam.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -13,8 +13,8 @@
 
 India is home to hundreds of millions of citizens who speak regional languages but encounter massive barriers consuming written text — from complex government welfare circulars and legal notices to school textbooks and healthcare advisories. Existing screen readers are monotonous, lack emotional Indic prosody, fail with code-mixed languages, and do not simplify bureaucratic jargon.
 
-**VaaniSetu (वाणीसेतु)** is a full-stack, multimodal audio intelligence studio powered by **Sarvam AI**. It transforms dense written content into:
-1. **Expressive Indic Audio Narration** with native prosody and synchronized sentence karaoke.
+**VaaniSetu (वाणीसेतु)** is a full-stack audio intelligence studio powered by **Sarvam AI**:
+1. **Expressive Indic Audio Narration** with native prosody across 11 Indic languages.
 2. **"Samjhaav" (Citizen Plain-Language Simplifier):** Translating dense legal/bureaucratic circulars into warm, everyday colloquial language.
 3. **"NotebookLM for Bharat" (Dual-Speaker Podcasts):** Converting articles and textbooks into a lively 2-host conversational podcast (**Aarav & Meera**).
 4. **Interactive Voice & Text Companion:** Hands-free voice question-answering during playback powered by **Saaras (ASR)** and **sarvam-105b**.
@@ -25,51 +25,12 @@ India is home to hundreds of millions of citizens who speak regional languages b
 
 | Feature | Description | Sarvam Engine |
 |---|---|---|
-| **📖 Direct Narration Studio** | Converts text to natural audio across 11 Indic languages with customizable personas (*Storyteller, News Anchor, Educator, Conversational*) and pacing. | `Bulbul` (`bulbul:v3` / `v4-flash`) |
+| **📖 Direct Narration** | Converts text to natural audio across 11 Indic languages with customizable personas (*Storyteller, News Anchor, Educator, Conversational*) and pacing. | `Bulbul` (`bulbul:v3` / `v4-flash`) |
 | **💡 Samjhaav (Citizen Simplifier)** | Automatically eliminates bureaucratic jargon, explaining rights, subsidies, and schemes in plain language. | `sarvam-105b-conversations` |
 | **🎙️ NotebookLM for Bharat** | Synthesizes a complete 2-host conversational dialogue (**Host 1: Aarav** & **Host 2: Meera**) stitched into a single podcast MP3 with speech bubble visuals. | `sarvam-105b` + `Bulbul` Multi-Voice |
 | **⚡ 60-Second Audio Briefs** | Compresses long articles into high-retention 140-word spoken audio bulletins. | `sarvam-105b` |
-| **💬 Voice Q&A Companion** | Listeners can click the mic or type to ask questions about the text; receives an instant spoken voice explanation. | `Saaras` (ASR) + `sarvam-105b` |
-| **📎 Multimodal Document Ingestion** | 1-click upload of PDFs, study notes, or government gazettes with automated text extraction and noise cleaning. | `pypdf` + Sarvam DocAI |
-| **🎵 Real-Time Sentence Karaoke** | Visual transcript highlights sentences in real time as the audio plays, enhancing literacy and accessibility. | Custom HTML5 Sync Engine |
-
----
-
-## 🏗️ System Architecture
-
-```mermaid
-flowchart TD
-    User([User / Citizen]) --> Ingest[Document Ingestion\nPDF, Text, or Manual Input]
-    
-    subgraph Adaptation [Sarvam-105B Content Adaptation]
-        Ingest -->|Raw Text| Router{Select Studio Mode}
-        Router -->|Direct| Direct[Verbatim Script]
-        Router -->|Samjhaav| Simplify[Plain-Language Simplifier]
-        Router -->|Brief| Summary[60-Second Audio Brief]
-        Router -->|Podcast| Dialogue[Dual-Speaker Script: Aarav & Meera]
-    end
-
-    subgraph Translation [Sarvam Mayura Engine]
-        Direct --> Mayura[Mayura:v1\nCross-Indic Translation]
-        Simplify --> Mayura
-        Summary --> Mayura
-    end
-
-    subgraph AudioEngine [Sarvam Bulbul TTS Engine]
-        Mayura --> BulbulSingle[Bulbul:v3 / v4-flash\nPersona Prosody Synthesis]
-        Dialogue --> BulbulMulti[Multi-Speaker Audio Stitcher\nHost 1: Aditya + Host 2: Roopa]
-    end
-
-    subgraph Companion [Interactive Voice Companion]
-        VoiceQuery([Spoken Voice Query]) --> Saaras[Saaras:v3 Speech-to-Text]
-        Saaras --> QA_LLM[sarvam-105b Context Q&A]
-        QA_LLM --> SpokenReply[Bulbul Spoken Voice Answer]
-    end
-
-    BulbulSingle --> Player[Web Studio Player & MP3 Download]
-    BulbulMulti --> Player
-    SpokenReply --> Player
-```
+| **💬 Voice & Text Companion** | Listeners can ask clarifying questions about the text and receive an instant voice explanation. | `Saaras` (ASR) + `sarvam-105b` + `Bulbul` |
+| **📎 PDF & Document Ingestion** | 1-click upload of PDFs, study notes, or government gazettes with automated text extraction. | `pypdf` |
 
 ---
 
@@ -91,7 +52,29 @@ flowchart TD
 
 ---
 
-## 💻 Quickstart & Local Setup
+## ☁️ 1-Click Free Deployment on Streamlit Community Cloud
+
+This project is built to deploy on **Streamlit Community Cloud** (100% Free, no timeouts, zero configuration):
+
+1. Go to **[share.streamlit.io](https://share.streamlit.io)** and log in with your GitHub account.
+2. Click **"Create app"** -> **"I already have an app"**.
+3. Select:
+   - **Repository:** `pandeyysurabhi/VaaniSetu`
+   - **Branch:** `main`
+   - **Main file path:** `streamlit_app.py`
+4. Expand **Advanced settings** -> **Secrets**, and paste:
+   ```toml
+   SARVAM_API_KEY = "your_actual_sarvam_api_key_here"
+   ```
+5. Click **"Deploy"**! 
+   Your app will be live with a permanent public link:
+   ```
+   https://vaanisetu-<your-username>.streamlit.app
+   ```
+
+---
+
+## 💻 Local Development
 
 ### 1. Clone & Navigate
 ```bash
@@ -99,7 +82,7 @@ git clone https://github.com/pandeyysurabhi/VaaniSetu.git
 cd VaaniSetu
 ```
 
-### 2. Configure Environment
+### 2. Configure `.env`
 Create a `.env` file in the project root:
 ```env
 SARVAM_API_KEY=your_sarvam_api_key_here
@@ -110,106 +93,22 @@ SARVAM_API_KEY=your_sarvam_api_key_here
 pip install -r requirements.txt
 ```
 
-### 4. Run the Studio Server
+### 4. Run Locally
 ```bash
-python -m uvicorn backend.app:app --reload
+streamlit run streamlit_app.py
 ```
-Open **`http://localhost:8000`** in your browser!
+Open **`http://localhost:8501`** in your browser.
 
 ---
 
-## 🧪 Running the Test Suites
+## 🧪 Testing
 
-The project includes automated integration test suites covering all Sarvam AI integrations:
-
+Run the verification test suite:
 ```bash
-# Phase 1: Bulbul TTS, Mayura Translation, Language ID
-python test_phase1.py
-
-# Phase 2: sarvam-105b Content Adaptation, Podcasts, PDF Extraction
-python test_phase2.py
-
-# Phase 3: Saaras Voice Recognition & Interactive Q&A Companion
-python test_phase3.py
+python test_app.py
 ```
-
----
-
-## 📡 API Reference
-
-### 1. Unified Narration (`/api/narrate`)
-```bash
-curl -X POST http://localhost:8000/api/narrate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "The Prime Minister announced a new digital scholarship scheme.",
-    "target_language_code": "hi-IN",
-    "persona": "news",
-    "pace": 1.0
-  }'
-```
-
-### 2. Dual-Speaker Podcast (`/api/podcast`)
-```bash
-curl -X POST http://localhost:8000/api/podcast \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "The benefits of rainwater harvesting in dry regions.",
-    "target_language_code": "hi-IN"
-  }'
-```
-
-### 3. Voice Companion Q&A (`/api/qa/voice`)
-```bash
-curl -X POST http://localhost:8000/api/qa/voice \
-  -F "context_text=PM Kisan provides 6000 rupees per year in 3 installments." \
-  -F "language_code=en-IN" \
-  -F "file=@voice_query.wav"
-```
-
----
-
-## ☁️ 100% Free Cloud Deployment Guides (Bonus Points)
-
-### Option A: Vercel (100% Free Serverless Deployment)
-The repository is pre-configured with `vercel.json` and `api/index.py`:
-1. Go to [vercel.com](https://vercel.com) and log in with your GitHub account.
-2. Click **Add New...** -> **Project**.
-3. Import your GitHub repository: `pandeyysurabhi/sarvam`.
-4. In the configuration screen, expand **Environment Variables**:
-   - **Key:** `SARVAM_API_KEY`
-   - **Value:** `your_actual_sarvam_api_key`
-5. Click **Deploy**.
-6. Within ~60 seconds, Vercel will give you a live production URL:
-   `https://sarvam-<your-username>.vercel.app`!
-
-### Option B: Streamlit Community Cloud (100% Free, Zero Cold Starts)
-The repository includes a dedicated `streamlit_app.py`:
-1. Go to [share.streamlit.io](https://share.streamlit.io) and log in with GitHub.
-2. Click **Create app** -> **I already have an app**.
-3. Select your repository: `pandeyysurabhi/sarvam`.
-4. Set Main file path: `streamlit_app.py`.
-5. Under **Advanced settings** -> **Secrets**, paste:
-   ```toml
-   SARVAM_API_KEY = "your_actual_sarvam_api_key"
-   ```
-6. Click **Deploy**! You will have a permanent live URL:
-   `https://sarvam-<your-username>.streamlit.app`!
-
-### Option C: Render (Free Web Service)
-1. In [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
-2. Select your repository (`render.yaml` is pre-configured).
-3. Set `SARVAM_API_KEY` under Environment Variables and deploy!
-
-### Option D: Docker
-```bash
-docker build -t vaanisetu .
-docker run -p 8000:8000 -e SARVAM_API_KEY="your_key" vaanisetu
-```
-
 
 ---
 
 ## 📜 License
 Distributed under the MIT License. Built with ❤️ for Bharat using [Sarvam AI](https://docs.sarvam.ai).
-

@@ -17,9 +17,20 @@ if ENV_PATH.exists():
 SARVAM_API_KEY = os.environ.get("SARVAM_API_KEY")
 
 def get_sarvam_client() -> SarvamAI:
-    if not SARVAM_API_KEY:
-        raise ValueError("SARVAM_API_KEY is not configured in .env or environment.")
-    return SarvamAI(api_subscription_key=SARVAM_API_KEY)
+    api_key = os.environ.get("SARVAM_API_KEY")
+    if not api_key:
+        try:
+            import streamlit as st
+            api_key = st.secrets.get("SARVAM_API_KEY")
+            if api_key:
+                os.environ["SARVAM_API_KEY"] = api_key
+        except Exception:
+            pass
+
+    if not api_key:
+        raise ValueError("SARVAM_API_KEY is not configured in .env, st.secrets, or environment.")
+    return SarvamAI(api_subscription_key=api_key)
+
 
 # Supported Indic Languages for Bulbul & Mayura
 SUPPORTED_LANGUAGES = {
