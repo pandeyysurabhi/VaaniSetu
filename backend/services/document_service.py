@@ -49,3 +49,4 @@ def extract_text_from_file(filename: str, file_bytes: bytes) -> Dict[str, Any]:
         }
     else:
         raise ValueError("Unsupported file type. Please upload a PDF, TXT, or MD document.")
+

@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -13,11 +13,12 @@ from backend.services.translation_service import translate_text, detect_language
 from backend.services.script_service import simplify_text, summarize_text, generate_podcast_script
 from backend.services.podcast_service import synthesize_podcast
 from backend.services.document_service import extract_text_from_file
+from backend.services.qa_service import answer_document_question, transcribe_audio_query
 
 app = FastAPI(
     title="VaaniSetu (वाणीसेतु) API",
     description="Indic Audio Intelligence & Accessibility Platform powered by Sarvam AI",
-    version="2.0.0"
+    version="3.0.0"
 )
 
 # CORS middleware for local development and web access
@@ -65,6 +66,11 @@ class PodcastRequest(BaseModel):
     turns: Optional[List[Dict[str, str]]] = Field(default=None, description="Pre-generated dialogue turns")
     target_language_code: str = Field(default="hi-IN", description="Spoken language code for podcast")
 
+class QARequest(BaseModel):
+    context_text: str = Field(..., description="The document or article text being discussed")
+    question: str = Field(..., description="The user's question about the text")
+    language_code: str = Field(default="hi-IN", description="Language code for the response")
+
 # Endpoints
 @app.get("/api/health")
 def health_check():
@@ -72,7 +78,7 @@ def health_check():
         "status": "healthy",
         "service": "VaaniSetu Audio Intelligence",
         "sarvam_configured": bool(SARVAM_API_KEY),
-        "version": "2.0.0"
+        "version": "3.0.0"
     }
 
 @app.get("/api/languages")
@@ -241,6 +247,56 @@ async def api_upload_document(file: UploadFile = File(...)):
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/qa/text")
+def api_qa_text(req: QARequest):
+    """
+    Text-based Q&A Companion: Answers user questions based on the document
+    and returns both written answer and spoken voice audio.
+    """
+    try:
+        result = answer_document_question(
+            context_text=req.context_text,
+            question=req.question,
+            language_code=req.language_code
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/qa/voice")
+async def api_qa_voice(
+    context_text: str = Form(...),
+    language_code: str = Form("hi-IN"),
+    file: UploadFile = File(...)
+):
+    """
+    Voice-based Q&A Companion:
+    1. Transcribes spoken question using Sarvam Saaras
+    2. Answers question based on document using sarvam-105b
+    3. Synthesizes voice audio answer using Bulbul
+    """
+    try:
+        audio_bytes = await file.read()
+        transcribed_q = transcribe_audio_query(
+            audio_bytes=audio_bytes,
+            filename=file.filename or "query.wav",
+            content_type=file.content_type or "audio/wav"
+        )
+        if not transcribed_q:
+            raise HTTPException(status_code=400, detail="Could not detect speech in the audio recording.")
+
+        result = answer_document_question(
+            context_text=context_text,
+            question=transcribed_q,
+            language_code=language_code
+        )
+        return {
+            "transcribed_question": transcribed_q,
+            **result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Mount static web frontend if directory exists
 STATIC_DIR = Path(__file__).resolve().parent / "static"
