@@ -71,8 +71,9 @@ class QARequest(BaseModel):
     question: str = Field(..., description="The user's question about the text")
     language_code: str = Field(default="hi-IN", description="Language code for the response")
 
-# Endpoints
+# Endpoints (Dual decorators support both direct calls and Vercel stripped prefixes)
 @app.get("/api/health")
+@app.get("/health")
 def health_check():
     return {
         "status": "healthy",
@@ -82,14 +83,17 @@ def health_check():
     }
 
 @app.get("/api/languages")
+@app.get("/languages")
 def get_languages():
     return {"languages": SUPPORTED_LANGUAGES}
 
 @app.get("/api/personas")
+@app.get("/personas")
 def get_personas():
     return {"personas": VOICE_PERSONAS}
 
 @app.post("/api/detect-language")
+@app.post("/detect-language")
 def api_detect_language(payload: dict):
     text = payload.get("text", "")
     if not text.strip():
@@ -101,6 +105,7 @@ def api_detect_language(payload: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/translate")
+@app.post("/translate")
 def api_translate(req: TranslationRequest):
     if not req.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty.")
@@ -116,6 +121,7 @@ def api_translate(req: TranslationRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/tts")
+@app.post("/tts")
 def api_tts(req: TTSRequest):
     if not req.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty.")
@@ -135,6 +141,7 @@ def api_tts(req: TTSRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/narrate")
+@app.post("/narrate")
 def api_narrate(req: NarrationRequest):
     """
     Combined narration pipeline:
@@ -181,6 +188,7 @@ def api_narrate(req: NarrationRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/adapt")
+@app.post("/adapt")
 def api_adapt(req: AdaptRequest):
     """
     Uses sarvam-105b to transform source text:
@@ -208,6 +216,7 @@ def api_adapt(req: AdaptRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/podcast")
+@app.post("/podcast")
 def api_podcast(req: PodcastRequest):
     """
     NotebookLM for Bharat: Converts input text into a complete, multi-speaker
@@ -234,6 +243,7 @@ def api_podcast(req: PodcastRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/upload-document")
+@app.post("/upload-document")
 async def api_upload_document(file: UploadFile = File(...)):
     """
     Extracts text from uploaded PDF, TXT, or MD documents.
@@ -249,6 +259,7 @@ async def api_upload_document(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/api/qa/text")
+@app.post("/qa/text")
 def api_qa_text(req: QARequest):
     """
     Text-based Q&A Companion: Answers user questions based on the document
@@ -265,6 +276,7 @@ def api_qa_text(req: QARequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/qa/voice")
+@app.post("/qa/voice")
 async def api_qa_voice(
     context_text: str = Form(...),
     language_code: str = Form("hi-IN"),
