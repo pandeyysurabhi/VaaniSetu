@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VaaniSetu (वाणीसेतु) — Indic Audio Studio</title>
+  <title>VaaniSetu (वाणीसेतु) — Indic Audio Studio & Podcast Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
@@ -19,12 +19,7 @@
       --accent-glow: rgba(245, 158, 11, 0.25);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Outfit', sans-serif;
       background-color: var(--bg);
@@ -38,7 +33,7 @@
     }
 
     header {
-      padding: 24px 32px;
+      padding: 20px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -46,12 +41,7 @@
       backdrop-filter: blur(10px);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
+    .brand { display: flex; align-items: center; gap: 14px; }
     .logo-badge {
       width: 44px;
       height: 44px;
@@ -64,16 +54,8 @@
       box-shadow: 0 4px 18px var(--accent-glow);
     }
 
-    .brand-title h1 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .brand-title p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
+    .brand-title h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .brand-title p { font-size: 13px; color: var(--text-muted); }
 
     .status-badge {
       display: flex;
@@ -87,13 +69,41 @@
       font-size: 13px;
       font-weight: 500;
     }
-
     .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 8px #10b981;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #10b981; box-shadow: 0 0 8px #10b981;
+    }
+
+    /* Mode Navigation Tabs */
+    .mode-nav {
+      max-width: 1200px;
+      width: 100%;
+      margin: 18px auto 0;
+      padding: 0 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .mode-tab {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .mode-tab:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+    .mode-tab.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      box-shadow: 0 0 14px var(--accent-glow);
     }
 
     main {
@@ -101,16 +111,13 @@
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 24px;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 28px;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
     }
-
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; }
     }
 
     .panel {
@@ -122,37 +129,53 @@
       backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
     .panel-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
     }
 
-    /* Samples chips */
+    /* Document upload pill */
+    .file-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .file-upload-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--text);
+    }
+
     .sample-chips {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
-
     .chip {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 14px;
+      padding: 5px 11px;
+      border-radius: 12px;
       font-size: 12px;
       cursor: pointer;
       transition: all 0.2s;
     }
-
     .chip:hover {
       background: rgba(245, 158, 11, 0.15);
       color: var(--accent-primary);
@@ -161,20 +184,19 @@
 
     textarea {
       width: 100%;
-      height: 170px;
+      height: 160px;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 14px;
       color: var(--text);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.5;
       resize: vertical;
       outline: none;
       transition: border 0.2s;
     }
-
     textarea:focus {
       border-color: var(--accent-primary);
       box-shadow: 0 0 0 2px var(--accent-glow);
@@ -183,80 +205,52 @@
     .controls-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 14px;
     }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
 
     select, input[type="range"] {
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--card-border);
       border-radius: 10px;
-      padding: 10px 12px;
+      padding: 9px 12px;
       color: var(--text);
       font-family: inherit;
       font-size: 14px;
       outline: none;
     }
 
-    /* Persona cards */
     .persona-cards {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-
     .persona-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 12px;
+      padding: 10px 12px;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
-
-    .persona-card:hover {
-      background: rgba(255, 255, 255, 0.07);
-    }
-
+    .persona-card:hover { background: rgba(255, 255, 255, 0.07); }
     .persona-card.active {
       background: rgba(245, 158, 11, 0.12);
       border-color: var(--accent-primary);
       box-shadow: 0 0 12px var(--accent-glow);
     }
-
-    .persona-name {
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .persona-desc {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.3;
-    }
+    .persona-name { font-size: 13px; font-weight: 600; }
+    .persona-desc { font-size: 11px; color: var(--text-muted); }
 
     .btn-submit {
       background: var(--accent-gradient);
       color: #0b0f19;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
       padding: 14px;
       border: none;
       border-radius: 12px;
@@ -268,103 +262,109 @@
       justify-content: center;
       gap: 10px;
     }
-
     .btn-submit:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 26px var(--accent-glow);
     }
-
-    .btn-submit:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     /* Output Panel */
     .audio-player-box {
       background: rgba(0, 0, 0, 0.35);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
-
-    audio {
-      width: 100%;
-      border-radius: 8px;
-      outline: none;
-    }
-
-    .action-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    audio { width: 100%; border-radius: 8px; outline: none; }
+    .action-row { display: flex; justify-content: space-between; align-items: center; }
     .btn-secondary {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text);
-      padding: 8px 14px;
+      padding: 6px 12px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.2s;
     }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
 
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    /* Karaoke container */
-    .karaoke-container {
-      max-height: 260px;
+    /* Dialogue & Karaoke visualizer */
+    .content-box {
+      max-height: 290px;
       overflow-y: auto;
-      padding: 12px;
+      padding: 14px;
       background: rgba(0, 0, 0, 0.2);
       border-radius: 12px;
       border: 1px solid var(--card-border);
-      line-height: 1.8;
-      font-size: 15px;
+      line-height: 1.7;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .karaoke-sentence {
-      padding: 4px 6px;
-      border-radius: 6px;
-      transition: background 0.2s, color 0.2s;
-      display: inline-block;
-      margin: 2px 0;
+      padding: 3px 5px;
+      border-radius: 4px;
+      transition: all 0.2s;
     }
-
     .karaoke-sentence.active {
       background: rgba(245, 158, 11, 0.25);
       color: #fbbf24;
       font-weight: 600;
     }
 
+    /* Podcast Dialogue Bubble Cards */
+    .podcast-turn {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .turn-host1 {
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid #3b82f6;
+    }
+    .turn-host2 {
+      background: rgba(236, 72, 153, 0.08);
+      border-left: 3px solid #ec4899;
+    }
+    .turn-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .turn-host1 .turn-header { color: #60a5fa; }
+    .turn-host2 .turn-header { color: #f472b6; }
+    .turn-body { font-size: 13.5px; line-height: 1.5; color: #e5e7eb; }
+
     .loading-spinner {
       border: 3px solid rgba(255, 255, 255, 0.2);
       border-top-color: #0b0f19;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       animation: spin 0.8s linear infinite;
       display: none;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     footer {
       text-align: center;
-      padding: 16px;
+      padding: 14px;
       font-size: 12px;
       color: var(--text-muted);
       border-top: 1px solid var(--card-border);
@@ -377,36 +377,56 @@
       <div class="logo-badge">🎙️</div>
       <div class="brand-title">
         <h1>VaaniSetu (वाणीसेतु)</h1>
-        <p>Indic Audio Intelligence & Accessibility Studio</p>
+        <p>Indic Audio Intelligence & Accessibility Studio • Powered by Sarvam AI</p>
       </div>
     </div>
     <div class="status-badge">
       <div class="status-dot"></div>
-      <span>Sarvam AI Active</span>
+      <span>Sarvam AI Online</span>
     </div>
   </header>
+
+  <!-- Studio Modes Navigation -->
+  <div class="mode-nav">
+    <div class="mode-tab active" data-mode="narrate" onclick="setStudioMode('narrate')">
+      📖 Direct Narration
+    </div>
+    <div class="mode-tab" data-mode="simplify" onclick="setStudioMode('simplify')">
+      💡 Samjhaav (Citizen Simplifier)
+    </div>
+    <div class="mode-tab" data-mode="summary" onclick="setStudioMode('summary')">
+      ⚡ 60s Audio Brief
+    </div>
+    <div class="mode-tab" data-mode="podcast" onclick="setStudioMode('podcast')">
+      🎙️ NotebookLM Podcast (Dual-Speaker)
+    </div>
+  </div>
 
   <main>
     <!-- Left Input Panel -->
     <div class="panel">
       <div class="panel-title">
-        <span>✍️</span> Content & Narration Settings
+        <span id="modeHeaderTitle">✍️ Source Text & Narration Settings</span>
+        <label class="file-upload-btn">
+          📎 Upload PDF / Doc
+          <input type="file" id="fileInput" accept=".pdf,.txt,.md" style="display: none;" onchange="handleFileUpload(event)">
+        </label>
       </div>
 
-      <!-- Preset Samples -->
+      <!-- Quick Preset Samples -->
       <div class="form-group">
-        <label>Try Quick Presets:</label>
+        <label>Quick Ingestion Presets:</label>
         <div class="sample-chips">
-          <div class="chip" onclick="loadSample('scheme')">🌾 Govt Welfare Notice</div>
-          <div class="chip" onclick="loadSample('tech')">🚀 ISRO Space News</div>
-          <div class="chip" onclick="loadSample('story')">📖 Panchatantra Tale</div>
-          <div class="chip" onclick="loadSample('health')">🩺 Health Advisory</div>
+          <div class="chip" onclick="loadSample('scheme')">🌾 PM Kisan Circular</div>
+          <div class="chip" onclick="loadSample('tech')">🚀 ISRO Deep Space</div>
+          <div class="chip" onclick="loadSample('story')">📖 Panchatantra Fable</div>
+          <div class="chip" onclick="loadSample('health')">🩺 Monsoon Health Advisory</div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="inputText">Source Text (Any Language):</label>
-        <textarea id="inputText" placeholder="Paste your article, textbook snippet, government circular, or news here..."></textarea>
+        <label for="inputText">Input Article, Circular, or Study Material:</label>
+        <textarea id="inputText" placeholder="Paste your text or upload a PDF above to begin..."></textarea>
       </div>
 
       <div class="controls-grid">
@@ -427,78 +447,80 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="paceGroup">
           <label for="paceSlider">Pacing: <span id="paceVal">1.0x</span></label>
           <input type="range" id="paceSlider" min="0.8" max="1.4" step="0.05" value="1.0" oninput="document.getElementById('paceVal').innerText = this.value + 'x'" />
         </div>
       </div>
 
-      <div class="form-group">
+      <!-- Persona cards (hidden in podcast mode since podcast uses dual hosts) -->
+      <div class="form-group" id="personaSection">
         <label>Voice Persona:</label>
         <div class="persona-cards">
           <div class="persona-card active" data-persona="storyteller" onclick="selectPersona(this)">
             <div class="persona-name">📖 Storyteller</div>
-            <div class="persona-desc">Warm, rich pauses, engaging pacing for fiction & explainers</div>
+            <div class="persona-desc">Warm, rich pauses, engaging pacing</div>
           </div>
           <div class="persona-card" data-persona="news" onclick="selectPersona(this)">
             <div class="persona-name">🎙️ News Anchor</div>
-            <div class="persona-desc">Crisp, authoritative diction & brisk rhythm for circulars</div>
+            <div class="persona-desc">Crisp, authoritative diction & brisk rhythm</div>
           </div>
           <div class="persona-card" data-persona="teacher" onclick="selectPersona(this)">
             <div class="persona-name">🎓 Educator</div>
-            <div class="persona-desc">Patient, clear articulation for tutorials & student notes</div>
+            <div class="persona-desc">Patient, clear articulation for tutorials</div>
           </div>
           <div class="persona-card" data-persona="conversational" onclick="selectPersona(this)">
             <div class="persona-name">💬 Conversational</div>
-            <div class="persona-desc">Modern, friendly casual tone for blogs & podcasts</div>
+            <div class="persona-desc">Modern, friendly casual tone</div>
           </div>
         </div>
       </div>
 
-      <button id="btnGenerate" class="btn-submit" onclick="generateAudio()">
+      <button id="btnGenerate" class="btn-submit" onclick="executeGeneration()">
         <span class="loading-spinner" id="spinner"></span>
-        <span id="btnText">Generate Indic Audio Narration</span>
+        <span id="btnText">Generate Audio</span>
       </button>
     </div>
 
     <!-- Right Output Panel -->
     <div class="panel">
       <div class="panel-title">
-        <span>🎧</span> Studio Output & Synchronized Player
+        <span>🎧</span> Studio Output & Real-Time Player
       </div>
 
       <div class="audio-player-box">
         <audio id="audioElement" controls></audio>
         <div class="action-row">
-          <span id="audioMeta" style="font-size: 13px; color: var(--text-muted);">Ready to narrate</span>
-          <a id="btnDownload" class="btn-secondary" href="#" download="vaanisetu_narration.mp3" style="display: none;">
+          <span id="audioMeta" style="font-size: 13px; color: var(--text-muted);">Ready to synthesize</span>
+          <a id="btnDownload" class="btn-secondary" href="#" download="vaanisetu_audio.mp3" style="display: none;">
             ⬇️ Download MP3
           </a>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Translated & Spoken Script (Real-time Karaoke):</label>
-        <div class="karaoke-container" id="karaokeBox">
-          <span style="color: var(--text-muted); font-style: italic;">Synthesized narration sentences will appear here with synchronized highlighting.</span>
+        <label id="contentBoxLabel">Narration Transcript / Script:</label>
+        <div class="content-box" id="contentBox">
+          <span style="color: var(--text-muted); font-style: italic;">The synthesized text, karaoke breakdown, or multi-speaker dialogue will appear here.</span>
         </div>
       </div>
     </div>
   </main>
 
   <footer>
-    VaaniSetu (वाणीसेतु) — Powered by Sarvam AI (Bulbul TTS, Mayura Translation, Saaras ASR, sarvam-105b)
+    VaaniSetu (वाणीसेतु) — Powered by Sarvam AI (sarvam-105b, Bulbul v3/v4-flash, Mayura v1, DocAI)
   </footer>
 
   <script>
+    let currentMode = 'narrate';
     let activePersona = 'storyteller';
     let sentencesList = [];
 
     const samples = {
-      scheme: "The Central Government has initiated the PM Kisan Samman Nidhi Scheme to provide financial assistance to small and marginal farmers across all states. Under this initiative, eligible landholding farmer families receive direct income support of six thousand rupees per year, deposited directly into their Aadhaar-linked bank accounts in three equal installments.",
+      scheme: "The Central Government has initiated the PM Kisan Samman Nidhi Scheme to provide financial assistance to small and marginal farmers across all states. Under this initiative, eligible landholding farmer families receive direct income support of six thousand rupees per year, deposited directly into their Aadhaar-linked bank accounts in three equal installments of two thousand rupees each.",
       tech: "India's space exploration agency, ISRO, has successfully placed multiple high-resolution communication satellites into low earth orbit. The payload was launched aboard the heavy-lift launch vehicle, marking another milestone for indigenous aerospace technology and opening affordable satellite connectivity for remote Indian villages.",
       story: "A thirsty crow flew over the villages in search of water. After hours of wandering under the blazing sun, he spotted a small clay pitcher in an orchard. But the water was at the very bottom, beyond the reach of his beak. Thinking patiently, the clever bird picked up small pebbles one by one and dropped them into the pot until the water rose to the brim.",
-      health: "Drinking clean, filtered water and washing hands thoroughly before meals are essential practices to protect against seasonal waterborne infections. During monsoon, health officials advise citizens to boil drinking water and avoid raw uncovered street food to prevent viral fever and gastroenteritis."
+      health: "Drinking clean, filtered water and washing hands thoroughly before meals are essential practices to protect against seasonal waterborne infections. During monsoon, health officials advise citizens to boil drinking water and avoid raw uncovered street food to prevent viral fever, typhoid, and gastroenteritis."
     };
 
     function loadSample(key) {
@@ -511,10 +533,64 @@
       activePersona = card.getAttribute('data-persona');
     }
 
-    async function generateAudio() {
+    function setStudioMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+
+      const personaSec = document.getElementById('personaSection');
+      const paceGroup = document.getElementById('paceGroup');
+      const btnText = document.getElementById('btnText');
+      const headerTitle = document.getElementById('modeHeaderTitle');
+
+      if (mode === 'podcast') {
+        personaSec.style.display = 'none';
+        paceGroup.style.display = 'none';
+        btnText.innerText = 'Generate Dual-Speaker Podcast (Aarav & Meera)';
+        headerTitle.innerText = '🎙️ Dual-Speaker Podcast Studio';
+      } else if (mode === 'simplify') {
+        personaSec.style.display = 'flex';
+        paceGroup.style.display = 'flex';
+        btnText.innerText = 'Simplify & Narrate (Samjhaav)';
+        headerTitle.innerText = '💡 Plain Language Simplifier & Reader';
+      } else if (mode === 'summary') {
+        personaSec.style.display = 'flex';
+        paceGroup.style.display = 'flex';
+        btnText.innerText = 'Generate 60-Second Audio Brief';
+        headerTitle.innerText = '⚡ 60-Second Audio Bulletin Studio';
+      } else {
+        personaSec.style.display = 'flex';
+        paceGroup.style.display = 'flex';
+        btnText.innerText = 'Generate Indic Audio Narration';
+        headerTitle.innerText = '✍️ Direct Narration Studio';
+      }
+    }
+
+    async function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const resp = await fetch('/api/upload-document', {
+          method: 'POST',
+          body: formData
+        });
+        if (!resp.ok) throw new Error('File extraction failed');
+        const data = await resp.json();
+        document.getElementById('inputText').value = data.text;
+        alert(`Extracted ${data.char_count} characters from ${data.filename} (${data.processed_pages} pages).`);
+      } catch (err) {
+        alert('Upload Error: ' + err.message);
+      }
+    }
+
+    async function executeGeneration() {
       const text = document.getElementById('inputText').value.trim();
       if (!text) {
-        alert("Please enter or select some text to narrate.");
+        alert("Please enter text or upload a document first.");
         return;
       }
 
@@ -526,65 +602,116 @@
       const btnText = document.getElementById('btnText');
       const audio = document.getElementById('audioElement');
       const downloadLink = document.getElementById('btnDownload');
-      const karaokeBox = document.getElementById('karaokeBox');
+      const contentBox = document.getElementById('contentBox');
       const meta = document.getElementById('audioMeta');
 
       btn.disabled = true;
       spinner.style.display = 'inline-block';
-      btnText.innerText = 'Synthesizing with Sarvam AI...';
+      const originalBtnText = btnText.innerText;
 
       try {
-        const response = await fetch('/api/narrate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            text: text,
-            target_language_code: targetLang,
-            source_language_code: 'auto',
-            persona: activePersona,
-            pace: pace
-          })
-        });
+        if (currentMode === 'podcast') {
+          btnText.innerText = 'sarvam-105b is scripting dialogue...';
+          const resp = await fetch('/api/podcast', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              text: text,
+              target_language_code: targetLang
+            })
+          });
 
-        if (!response.ok) {
-          const errData = await response.json();
-          throw new Error(errData.detail || 'Synthesis failed');
+          if (!resp.ok) {
+            const err = await resp.json();
+            throw new Error(err.detail || 'Podcast synthesis failed');
+          }
+
+          const data = await resp.json();
+          audio.src = data.audio_data_uri;
+          audio.play();
+          downloadLink.href = data.audio_data_uri;
+          downloadLink.style.display = 'inline-flex';
+          meta.innerText = `Podcast: 2 Hosts (Aarav & Meera) | ${data.turn_count} Dialogue Turns`;
+
+          // Render Dialogue Bubbles
+          contentBox.innerHTML = '';
+          data.turns.forEach(t => {
+            const div = document.createElement('div');
+            div.className = `podcast-turn turn-${t.speaker_id}`;
+            div.innerHTML = `
+              <div class="turn-header">${t.speaker_id === 'host1' ? '🎙️ Aarav (Host)' : '🎓 Meera (Expert)'}</div>
+              <div class="turn-body">${t.text}</div>
+            `;
+            contentBox.appendChild(div);
+          });
+
+        } else {
+          // Direct Narration, Samjhaav (Simplify), or Summary
+          let textToNarrate = text;
+
+          if (currentMode === 'simplify' || currentMode === 'summary') {
+            btnText.innerText = currentMode === 'simplify' ? 'Simplifying jargon with sarvam-105b...' : 'Creating 60s summary...';
+            const adaptResp = await fetch('/api/adapt', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                text: text,
+                mode: currentMode,
+                target_language_code: targetLang
+              })
+            });
+            if (!adaptResp.ok) throw new Error('Adaptation failed');
+            const adaptData = await adaptResp.json();
+            textToNarrate = adaptData.adapted_text;
+          }
+
+          btnText.innerText = 'Synthesizing with Sarvam Bulbul...';
+          const narrateResp = await fetch('/api/narrate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              text: textToNarrate,
+              target_language_code: targetLang,
+              source_language_code: 'auto',
+              persona: activePersona,
+              pace: pace
+            })
+          });
+
+          if (!narrateResp.ok) {
+            const err = await narrateResp.json();
+            throw new Error(err.detail || 'Narration failed');
+          }
+
+          const data = await narrateResp.json();
+          audio.src = data.audio_data_uri;
+          audio.play();
+          downloadLink.href = data.audio_data_uri;
+          downloadLink.style.display = 'inline-flex';
+          meta.innerText = `Speaker: ${data.speaker} | Chunks: ${data.chunk_count} | Lang: ${data.target_language_code}`;
+
+          // Populate sentence karaoke
+          sentencesList = data.sentences || [];
+          contentBox.innerHTML = '';
+          sentencesList.forEach((s, idx) => {
+            const span = document.createElement('span');
+            span.className = 'karaoke-sentence';
+            span.id = `sent-${idx}`;
+            span.innerText = s + ' ';
+            contentBox.appendChild(span);
+          });
         }
 
-        const data = await response.json();
-        
-        // Setup Audio Player
-        audio.src = data.audio_data_uri;
-        audio.play();
-
-        // Setup Download
-        downloadLink.href = data.audio_data_uri;
-        downloadLink.style.display = 'inline-flex';
-
-        // Metadata
-        meta.innerText = `Speaker: ${data.speaker} | Chunks: ${data.chunk_count} | Lang: ${data.target_language_code}`;
-
-        // Populate Karaoke
-        sentencesList = data.sentences || [];
-        karaokeBox.innerHTML = '';
-        sentencesList.forEach((s, idx) => {
-          const span = document.createElement('span');
-          span.className = 'karaoke-sentence';
-          span.id = `sent-${idx}`;
-          span.innerText = s + ' ';
-          karaokeBox.appendChild(span);
-        });
-
       } catch (err) {
-        alert('Error: ' + err.message);
+        alert('Generation Error: ' + err.message);
       } finally {
         btn.disabled = false;
         spinner.style.display = 'none';
-        btnText.innerText = 'Generate Indic Audio Narration';
+        btnText.innerText = originalBtnText;
       }
     }
 
-    // Synchronize karaoke highlights with audio playback progress
+    // Karaoke synchronization
     const audioEl = document.getElementById('audioElement');
     audioEl.addEventListener('timeupdate', () => {
       if (!sentencesList.length || !audioEl.duration) return;

@@ -2,3 +2,6 @@ sarvamai>=0.1.42
 fastapi>=0.115.0
 uvicorn>=0.30.0
 pydantic>=2.0.0
+pypdf>=6.0.0
+python-multipart>=0.0.30
+

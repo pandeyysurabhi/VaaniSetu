@@ -115,3 +115,4 @@ def translate_text(
         "translated_text": full_translated_text,
         "source_language_code": detected_source
     }
+

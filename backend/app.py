@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
-from typing import Optional, List
-from fastapi import FastAPI, HTTPException
+from typing import Optional, List, Dict, Any
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -10,11 +10,14 @@ from pydantic import BaseModel, Field
 from backend.config import SUPPORTED_LANGUAGES, VOICE_PERSONAS, SARVAM_API_KEY
 from backend.services.tts_service import synthesize_speech
 from backend.services.translation_service import translate_text, detect_language
+from backend.services.script_service import simplify_text, summarize_text, generate_podcast_script
+from backend.services.podcast_service import synthesize_podcast
+from backend.services.document_service import extract_text_from_file
 
 app = FastAPI(
     title="VaaniSetu (वाणीसेतु) API",
     description="Indic Audio Intelligence & Accessibility Platform powered by Sarvam AI",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 # CORS middleware for local development and web access
@@ -52,6 +55,16 @@ class NarrationRequest(BaseModel):
     pace: Optional[float] = Field(default=None, description="Pace override")
     pitch: Optional[float] = Field(default=None, description="Pitch override")
 
+class AdaptRequest(BaseModel):
+    text: str = Field(..., description="Source text to adapt")
+    mode: str = Field(default="simplify", description="Adaptation mode: simplify, summary, podcast")
+    target_language_code: str = Field(default="hi-IN", description="Target Indic language")
+
+class PodcastRequest(BaseModel):
+    text: Optional[str] = Field(default=None, description="Input text to convert to podcast")
+    turns: Optional[List[Dict[str, str]]] = Field(default=None, description="Pre-generated dialogue turns")
+    target_language_code: str = Field(default="hi-IN", description="Spoken language code for podcast")
+
 # Endpoints
 @app.get("/api/health")
 def health_check():
@@ -59,7 +72,7 @@ def health_check():
         "status": "healthy",
         "service": "VaaniSetu Audio Intelligence",
         "sarvam_configured": bool(SARVAM_API_KEY),
-        "version": "1.0.0"
+        "version": "2.0.0"
     }
 
 @app.get("/api/languages")
@@ -118,7 +131,7 @@ def api_tts(req: TTSRequest):
 @app.post("/api/narrate")
 def api_narrate(req: NarrationRequest):
     """
-    Combined pipeline:
+    Combined narration pipeline:
     1. Detects language if auto
     2. Translates if target language differs from source
     3. Synthesizes expressive audio using chosen persona
@@ -126,7 +139,6 @@ def api_narrate(req: NarrationRequest):
     if not req.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty.")
     try:
-        # Step 1 & 2: Translate if necessary
         translated_text = req.text
         source_lang = req.source_language_code
 
@@ -142,7 +154,6 @@ def api_narrate(req: NarrationRequest):
             )
             translated_text = trans_res["translated_text"]
 
-        # Step 3: Synthesize audio
         tts_res = synthesize_speech(
             text=translated_text,
             language_code=req.target_language_code,
@@ -162,6 +173,74 @@ def api_narrate(req: NarrationRequest):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/adapt")
+def api_adapt(req: AdaptRequest):
+    """
+    Uses sarvam-105b to transform source text:
+    - simplify: plain language explainer (Samjhaav)
+    - summary: 60-second audio brief
+    - podcast: dual-speaker conversational dialogue script
+    """
+    if not req.text.strip():
+        raise HTTPException(status_code=400, detail="Text cannot be empty.")
+    
+    lang_name = SUPPORTED_LANGUAGES.get(req.target_language_code, {}).get("name", "Hindi")
+    try:
+        if req.mode == "simplify":
+            adapted = simplify_text(req.text, language_name=lang_name)
+            return {"mode": req.mode, "adapted_text": adapted, "language": lang_name}
+        elif req.mode == "summary":
+            adapted = summarize_text(req.text, language_name=lang_name)
+            return {"mode": req.mode, "adapted_text": adapted, "language": lang_name}
+        elif req.mode == "podcast":
+            turns = generate_podcast_script(req.text, language_name=lang_name)
+            return {"mode": req.mode, "turns": turns, "language": lang_name}
+        else:
+            raise HTTPException(status_code=400, detail=f"Unsupported mode: {req.mode}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/podcast")
+def api_podcast(req: PodcastRequest):
+    """
+    NotebookLM for Bharat: Converts input text into a complete, multi-speaker
+    conversational podcast with 2 distinct voices (Host 1 & Host 2).
+    """
+    try:
+        lang_name = SUPPORTED_LANGUAGES.get(req.target_language_code, {}).get("name", "Hindi")
+        turns = req.turns
+        
+        # If turns not provided, generate script using sarvam-105b
+        if not turns:
+            if not req.text or not req.text.strip():
+                raise HTTPException(status_code=400, detail="Either 'text' or 'turns' must be provided.")
+            turns = generate_podcast_script(req.text, language_name=lang_name)
+
+        # Synthesize dual-speaker audio
+        podcast_res = synthesize_podcast(turns, language_code=req.target_language_code)
+        return {
+            "target_language_code": req.target_language_code,
+            "turns": turns,
+            **podcast_res
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/upload-document")
+async def api_upload_document(file: UploadFile = File(...)):
+    """
+    Extracts text from uploaded PDF, TXT, or MD documents.
+    """
+    try:
+        file_bytes = await file.read()
+        extracted = extract_text_from_file(file.filename, file_bytes)
+        return {
+            "filename": file.filename,
+            **extracted
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 # Mount static web frontend if directory exists
 STATIC_DIR = Path(__file__).resolve().parent / "static"
