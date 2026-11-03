@@ -95,8 +95,8 @@ flowchart TD
 
 ### 1. Clone & Navigate
 ```bash
-git clone https://github.com/pandeyysurabhi/sarvam.git
-cd sarvam
+git clone https://github.com/pandeyysurabhi/VaaniSetu.git
+cd VaaniSetu
 ```
 
 ### 2. Configure Environment
